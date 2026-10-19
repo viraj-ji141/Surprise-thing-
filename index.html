@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choose a Flower</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at top, #1e2638, #0d1117);
+      color: #fff;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    /* Grid of 4 touchable buttons */
+    .flower-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .flower-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      padding: 24px 16px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      color: #fff;
+      backdrop-filter: blur(8px);
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .flower-btn:active {
+      transform: scale(0.96);
+    }
+
+    .flower-icon {
+      font-size: 2.8rem;
+    }
+
+    /* Bloom display section */
+    .bloom-view {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .bloom-box {
+      width: 260px;
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .flower-art {
+      width: 100%;
+      height: 100%;
+      animation: bloomAnim 1.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+    }
+
+    .flower-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      text-transform: capitalize;
+    }
+
+    .flower-desc {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    .back-btn {
+      background: #ffffff;
+      color: #0f172a;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .back-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Bloom Keyframes */
+    @keyframes bloomAnim {
+      0% {
+        transform: scale(0.1) rotate(-45deg);
+        opacity: 0;
+        filter: blur(4px);
+      }
+      60% {
+        transform: scale(1.08) rotate(5deg);
+        opacity: 1;
+        filter: blur(0px);
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Screen 1: Selection screen -->
+    <div id="selection-screen">
+      <h1>Choose a flower</h1>
+      <div class="flower-grid">
+        <button class="flower-btn" onclick="showBloom('rose')">
+          <span class="flower-icon">🌹</span>
+          <span>Rose</span>
+        </button>
+        <button class="flower-btn" onclick="showBloom('lily')">
+          <span class="flower-icon">🪷</span>
+          <span>Lily</span>
+        </button>
+        <button class="flower-btn" onclick="showBloom('tulip')">
+          <span class="flower-icon">🌷</span>
+          <span>Tulip</span>
+        </button>
+        <button class="flower-btn" onclick="showBloom('jasmine')">
+          <span class="flower-icon">🌼</span>
+          <span>Jasmine</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Screen 2: Bloom display -->
+    <div id="bloom-screen" class="bloom-view">
+      <div class="bloom-box" id="flower-svg-box"></div>
+      <div class="flower-title" id="flower-name"></div>
+      <div class="flower-desc" id="flower-meaning"></div>
+      <button class="back-btn" onclick="goBack()">Choose Another</button>
+    </div>
+  </div>
+
+  <script>
+    const flowers = {
+      rose: {
+        name: "Rose",
+        meaning: "A timeless symbol of love, passion, and admiration.",
+        svg: `
+          <svg viewBox="0 0 200 200" class="flower-art">
+            <circle cx="100" cy="100" r="70" fill="#e11d48"/>
+            <path d="M 60 90 C 70 50, 130 50, 140 90 C 130 140, 70 140, 60 90 Z" fill="#be123c"/>
+            <path d="M 75 95 C 85 70, 115 70, 125 95 C 115 125, 85 125, 75 95 Z" fill="#9f1239"/>
+            <circle cx="100" cy="98" r="14" fill="#881337"/>
+          </svg>`
+      },
+      lily: {
+        name: "Lily",
+        meaning: "Represents purity, devotion, and new beginnings.",
+        svg: `
+          <svg viewBox="0 0 200 200" class="flower-art">
+            <ellipse cx="100" cy="65" rx="20" ry="45" fill="#f472b6" />
+            <ellipse cx="100" cy="135" rx="20" ry="45" fill="#f472b6" />
+            <ellipse cx="65" cy="100" rx="45" ry="20" fill="#ec4899" />
+            <ellipse cx="135" cy="100" rx="45" ry="20" fill="#ec4899" />
+            <circle cx="100" cy="100" r="18" fill="#fde047" />
+          </svg>`
+      },
+      tulip: {
+        name: "Tulip",
+        meaning: "Symbolizes perfect, enduring love and fresh confidence.",
+        svg: `
+          <svg viewBox="0 0 200 200" class="flower-art">
+            <path d="M 60 130 C 50 80, 70 50, 85 90 C 95 60, 105 60, 115 90 C 130 50, 150 80, 140 130 C 130 160, 70 160, 60 130 Z" fill="#fb923c"/>
+            <path d="M 80 135 C 75 105, 125 105, 120 135 Z" fill="#ea580c"/>
+          </svg>`
+      },
+      jasmine: {
+        name: "Jasmine",
+        meaning: "Known for graceful simplicity, calm, and sweet affection.",
+        svg: `
+          <svg viewBox="0 0 200 200" class="flower-art">
+            <ellipse cx="100" cy="60" rx="15" ry="32" fill="#ffffff"/>
+            <ellipse cx="100" cy="140" rx="15" ry="32" fill="#ffffff"/>
+            <ellipse cx="60" cy="100" rx="32" ry="15" fill="#f8fafc"/>
+            <ellipse cx="140" cy="100" rx="32" ry="15" fill="#f8fafc"/>
+            <circle cx="100" cy="100" r="14" fill="#facc15"/>
+          </svg>`
+      }
+    };
+
+    function showBloom(type) {
+      const data = flowers[type];
+      document.getElementById("selection-screen").style.display = "none";
+      const bloomScreen = document.getElementById("bloom-screen");
+      bloomScreen.style.display = "flex";
+      
+      document.getElementById("flower-svg-box").innerHTML = data.svg;
+      document.getElementById("flower-name").innerText = data.name;
+      document.getElementById("flower-meaning").innerText = data.meaning;
+    }
+
+    function goBack() {
+      document.getElementById("bloom-screen").style.display = "none";
+      document.getElementById("selection-screen").style.display = "block";
+    }
+  </script>
+</body>
+</html>
